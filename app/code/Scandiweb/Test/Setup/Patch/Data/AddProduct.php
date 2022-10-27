@@ -21,22 +21,6 @@ use Magento\Store\Model\StoreManagerInterface;
 class AddProduct implements DataPatchInterface
 {
     /**
-     * @return array
-     */
-    public static function getDependencies(): array
-    {
-        return [];
-    }
-
-    /**
-     * @return array
-     */
-    public function getAliases(): array
-    {
-        return [];
-    }
-
-    /**
      * @var ProductInterfaceFactory
      */
     protected ProductInterfaceFactory $productFactory;
@@ -70,6 +54,11 @@ class AddProduct implements DataPatchInterface
      * @var EavSetup
      */
     protected EavSetup $eavSetup;
+
+    /**
+     * @var CategoryLinkManagementInterface 
+     */
+    protected CategoryLinkManagementInterface  $categoryLink;
 
     /**
      * @var array
@@ -108,11 +97,25 @@ class AddProduct implements DataPatchInterface
         $this->categoryLink = $categoryLink;
     }
 
-
-    public function apply()
+    /**
+     * @return AddProduct|void
+     * @throws \Exception
+     */
+	public function apply()
     {
-        $this->appState->setAreaCode('adminhtml');
+        $this->appState->emulateAreaCode('adminhtml', [$this, 'execute']);
+    }
 
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Validation\ValidationException
+     */
+    public function execute()
+    {
         $product = $this->productFactory->create();  // create product
         $prodSKU = 'white_clean_tee';
 
@@ -137,5 +140,21 @@ class AddProduct implements DataPatchInterface
         $this->sourceItemsSaveInterface->execute($this->sourceItems);
 
         $this->categoryLink->assignProductToCategories($product->getSku(), [2]);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getDependencies(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function getAliases(): array
+    {
+        return [];
     }
 }
