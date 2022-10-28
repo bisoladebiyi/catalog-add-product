@@ -16,6 +16,12 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\Validation\ValidationException;
+use Exception;
 
 
 class AddProduct implements DataPatchInterface
@@ -99,7 +105,7 @@ class AddProduct implements DataPatchInterface
 
     /**
      * @return AddProduct|void
-     * @throws \Exception
+     * @throws Exception
      */
 	public function apply()
     {
@@ -108,11 +114,11 @@ class AddProduct implements DataPatchInterface
 
     /**
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\StateException
-     * @throws \Magento\Framework\Validation\ValidationException
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws StateException
+     * @throws ValidationException
      */
     public function execute()
     {
